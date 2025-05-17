@@ -23,3 +23,22 @@ class Order:
     # Driver: Rachid Cisse - calculate_total
     def calculate_total(self):
         return sum(item.price for item in self.teams) # adds up the prices for total cost
+    # Driver: Joshuel Robinson - generate_receipt
+    def generate_receipt(self):
+        receipt = "\n".join([str(item) for item in self.items])  # lists all ordered items
+        receipt += f"\nTotal: ${self.calculate_total():.2f}"  # adds total to the bottom
+        return receipt
+
+    # Driver: Joshuel Robinson - save_receipt_to_file
+    def save_receipt_to_file(self, filename="receipt.txt"):
+        with open(filename, "w") as file:
+            file.write(self.generate_receipt())
+
+class Inventory:
+    """Tracks available inventory items and stock levels."""
+    def __init__(self):
+        self.stock = {}  # item names and how many we have left
+
+    # Driver: Joshuel Robinson - update_stock
+    def update_stock(self, item_name, quantity):
+        self.stock[item_name] = self.stock.get(item_name, 0) + quantity  # add more or restock
