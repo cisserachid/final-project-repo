@@ -20,8 +20,6 @@ class Order:
     # Driver: Rachid Cisse - add_item
     def add_item(self, item):
         self.items.append(item)  # adds item to the order
-
     # Driver: Rachid Cisse - calculate_total
     def calculate_total(self):
-        return sum(item.price for item in self.items)  # adds up the prices for total cost
-
+        return sum(item.price for item in self.teams) # adds up the prices for total cost
