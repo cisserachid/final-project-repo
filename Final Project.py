@@ -42,3 +42,68 @@ class Inventory:
     # Driver: Joshuel Robinson - update_stock
     def update_stock(self, item_name, quantity):
         self.stock[item_name] = self.stock.get(item_name, 0) + quantity  # add more or restock
+    # Driver: Aby - is_in_stock
+    def is_in_stock(self, item_name):
+        return self.stock.get(item_name, 0) > 0  # returns True if at least one left
+
+    # Driver: Aby - reduce_stock
+    def reduce_stock(self, item_name, quantity=1):
+        if self.is_in_stock(item_name):
+            self.stock[item_name] -= quantity  # subtract the quantity ordered
+            return True
+        return False  # nothing to reduce if out of stock
+
+    # Driver: Aby - display_stock
+    def display_stock(self):
+        return "\n".join([f"{item}: {qty} left" for item, qty in self.stock.items()])  # shows remaining stock
+
+# Driver: Aby - run_order_system
+def run_order_system():
+    menu = {
+        "Taco": MenuItem("Taco", 3.50),
+        "Burrito": MenuItem("Burrito", 6.00),
+        "Soda": MenuItem("Soda", 1.50)
+    }
+
+    inventory = Inventory()
+    inventory.update_stock("Taco", 5)
+    inventory.update_stock("Burrito", 3)
+    inventory.update_stock("Soda", 10)
+
+    print("Welcome to the Food Truck!")
+    print("Menu:")
+    for item in menu.values():
+        print(item)
+
+    print("\nCurrent Inventory:")
+    print(inventory.display_stock())
+
+    order = Order()
+
+    while True:
+        choice = input("\nEnter item name to order (or 'done' to finish): ").strip()
+        if choice.lower() == "done":
+            break
+        elif choice in menu:
+            if inventory.is_in_stock(choice):
+                order.add_item(menu[choice])
+                inventory.reduce_stock(choice)
+                print(f"{choice} added to order.")
+            else:
+                print("Sorry, that item is out of stock.")
+        else:
+            print("Invalid item. Please choose from the menu.")
+
+    print("\n--- Receipt ---")
+    receipt = order.generate_receipt()
+    print(receipt)
+
+    # Save receipt to a file
+    order.save_receipt_to_file()
+    print("Receipt saved to 'receipt.txt'.")
+
+    print("\nRemaining Inventory:")
+    print(inventory.display_stock())
+
+if __name__ == "__main__":
+    run_order_system()
